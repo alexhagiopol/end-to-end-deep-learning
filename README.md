@@ -1,6 +1,8 @@
-# Behaviorial Cloning Project
+# End-to-End Learning in a Self-Driving Car Simulation
 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+## Abstract
+
+This project implements the [nVidia paper](https://arxiv.org/pdf/1604.07316.pdf) that describes a convolutional neural network architecture used to infer vehicle control inputs given a forward facing camera stream.   
 
 Overview
 ---
