@@ -1,16 +1,12 @@
-# End-to-End Learning for Video Games
+# End-to-End Learning in a Driving Simulation
 
 ## Abstract
 
-This project implements the [nVidia paper](https://arxiv.org/pdf/1604.07316.pdf) that describes a convolutional neural network architecture used to infer vehicle control inputs given a forward facing camera stream. We apply this paper to a driving video 
-game in which the player provides control inputs via the keyboard that are modeled by the neural network in order to create a driving agent.
-
-The following resources can be found in this github repository:
-* drive.py
-* video.py
-* writeup_template.md
-
-The simulator can be downloaded from the classroom. In the classroom, we have also provided sample data that you can optionally use to help train your model.
+This project implements the paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
+Bojarski et al. describe a convolutional neural network architecture used to infer vehicle control inputs given a forward 
+facing camera stream. I apply the techniques in this paper to a [driving simulation](https://github.com/udacity/self-driving-car-sim) 
+game developed by Udacity, Inc. A player inputs controls to the simulator's virtual vehicle, and the mapping between the 
+scene in front of the car and the player's controls is modeled by a neural network to "autonomously drive" the virtual car. 
 
 ## Details About Files In This Directory
 
