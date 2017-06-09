@@ -1,6 +1,6 @@
-# End-to-End Learning in a Driving Simulation
+## End-to-End Learning in a Driving Simulation
 
-## Abstract
+#### Abstract
 
 This project implements the 2016 paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
 Bojarski et al. describe a convolutional neural network architecture used to infer vehicle control inputs given a forward 
@@ -10,9 +10,31 @@ scene in front of the car and the player's controls is modeled by a neural netwo
 
 ![manual_diving_example](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/manual_driving_example.gif)
 
-## Details About Files In This Directory
+#### Installation
 
-### `drive.py`
+This procedure was tested on Ubuntu 16.04 and Mac OS X 10.11.6 (El Capitan). GPU-accelerated training is supported on Ubuntu only.
+Prerequisites: Install Python package dependencies using [my instructions.](https://github.com/alexhagiopol/deep_learning_packages) Then, activate the environment:
+
+    source activate deep-learning
+
+Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration with CUDA v8.0 and cuDNN v5.1:
+
+    wget https://www.dropbox.com/s/08ufs95pw94gu37/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb
+    sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb
+    sudo apt-get update
+    sudo apt-get install cuda
+    wget https://www.dropbox.com/s/9uah11bwtsx5fwl/cudnn-8.0-linux-x64-v5.1.tgz
+    tar -xvzf cudnn-8.0-linux-x64-v5.1.tgz
+    cd cuda/lib64
+    export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
+    cd ..
+    export CUDA_HOME=`pwd`
+    sudo apt-get install libcupti-dev
+    pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
+
+#### Details About Files In This Directory
+
+##### `drive.py`
 
 Usage of `drive.py` requires you have saved the trained model as an h5 file, i.e. `model.h5`. See the [Keras documentation](https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model) for how to create this file using the following command:
 ```sh
@@ -29,7 +51,7 @@ The above command will load the trained model and use the model to make predicti
 
 Note: There is known local system's setting issue with replacing "," with "." when using drive.py. When this happens it can make predicted steering values clipped to max/min values. If this occurs, a known fix for this is to add "export LANG=en_US.utf8" to the bashrc file.
 
-#### Saving a video of the autonomous agent
+##### Saving a video of the autonomous agent
 
 ```sh
 python drive.py model.h5 run1
@@ -55,7 +77,7 @@ ls run1
 
 The image file name is a timestamp of when the image was seen. This information is used by `video.py` to create a chronological video of the agent driving.
 
-### `video.py`
+##### `video.py`
 
 ```sh
 python video.py run1
@@ -70,8 +92,3 @@ python video.py run1 --fps 48
 ```
 
 Will run the video at 48 FPS. The default FPS is 60.
-
-#### Why create a video
-
-1. It's been noted the simulator might perform differently based on the hardware. So if your model drives succesfully on your machine it might not on another machine (your reviewer). Saving a video is a solid backup in case this happens.
-2. You could slightly alter the code in `drive.py` and/or `video.py` to create a video of what your model sees after the image is processed (may be helpful for debugging).
