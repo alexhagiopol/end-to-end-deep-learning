@@ -2,12 +2,13 @@
 
 #### Abstract
 
-This project implements the 2016 paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
+This project implements NVIDIA's 2016 paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
 Bojarski et al. describe a convolutional neural network architecture used to infer vehicle control inputs given a forward 
 facing camera stream. I apply the techniques in this paper to a [driving simulation](https://github.com/udacity/self-driving-car-sim) 
 game developed by Udacity, Inc. A player inputs controls to the simulator's virtual vehicle, and the mapping between the 
 scene in front of the car and the player's controls is modeled by a neural network to "autonomously drive" the virtual car. 
 
+![nvidia demo](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/nvidia_demo.gif)
 ![manual_diving_example](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/manual_driving_example.gif)
 
 #### Installation
