@@ -1,69 +1,45 @@
 import cv2
 import glob
 import os
-import matplotlib.pyplot as plt
 import numpy as np
-from keras.models import Sequential
-from keras.layers import Lambda, Flatten, Dense, Conv2D, ELU, Dropout
-from keras.utils import plot_model
-
-
-def show_image(location, title, img, width=None):
-    if width is not None:
-        plt.figure(figsize=(width, width))
-    plt.subplot(*location)
-    plt.title(title, fontsize=8)
-    plt.axis('off')
-    if len(img.shape) == 3:
-        plt.imshow(img)
-    else:
-        plt.imshow(img, cmap='gray')
-    if width is not None:
-        plt.show()
-        plt.close()
-
-def convert_to_matrix(input_dir):
-    image_path_list = glob.glob(os.path.join(input_dir, '*.jpg'))
-    for image_path in image_path_list:
-            image = cv2.imread
-
-def preprocessing(input_dir, output_dir):
-    """
-    Preprocess all images with cropping and grayscale then save them to disk.
-    """
-
-    assert(os.path.exists(input_dir))
-    if not os.path.exists(image_output_dir):
-        os.mkdir(image_output_dir)
-    image_path_list = glob.glob(os.path.join(input_dir, '*.jpg'))
-    for image_path in image_path_list:
-        image_name = image_path[len(input_dir) + 1:]
-        image = cv2.imread(image_path)
-        bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)  # convert to BGR for opencv visualization
-        gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
-        cropped_image = gray_image[70:137, 0:]
-        cv2.imwrite(os.path.join(output_dir, image_name), cropped_image)
-        print('preprocessed ', image_name, ' to path ', output_dir)
-        # print(gray_image.shape)
-        # show_image((1, 1, 1), image_path, cropped_image, 3)  # location, path, image, width?
-
-def simple_test_model(input_shape=(160, 320, 3)):
-    """Very simple model to test out flow"""
-
-    # create model
-    model = Sequential()
-
-    # normalize pixels to between -1 <= x <= 1
-    model.add(Lambda(lambda x: (x / 255.0) * 2 - 1, input_shape=input_shape))
-
-    model.add(Flatten())
-    model.add(Dense(1))
-
-    model.compile(loss="mse", optimizer="adam")
-
-    return model
+import csv
+import glob
+import utilities
+import pandas as pd
+import pickle
 
 if __name__ == "__main__":
     image_input_dir = 'data/IMG'
-    image_output_dir = 'data/preproc_IMG'
-    preprocessing(image_input_dir, image_output_dir)
+    image_preproc_dir = 'data/preproc_IMG'
+    driving_log = pd.read_csv('data/driving_log.csv')
+    num_measurements = driving_log.shape[0]
+    num_images = num_measurements * 3  # * 3 because of left center and right image for each entry.
+    y_train = np.zeros(3 * num_measurements)  # we triple the number of measurements because we have 3 cameras
+    X_train = np.zeros((67, 320, num_images))
+    measurement_index = 0
+    while measurement_index < num_measurements:
+        datum_index = measurement_index * 3
+        y_train[datum_index] = driving_log.iloc[measurement_index, 3]
+        y_train[datum_index + 1] = driving_log.iloc[measurement_index, 3]
+        y_train[datum_index + 2] = driving_log.iloc[measurement_index, 3]
+
+        center_image_filename = driving_log.iloc[measurement_index, 0][4:]  # get rid of "IMG/" in data log
+        center_image_path = os.path.join(image_preproc_dir, center_image_filename)
+        center_image_matrix = cv2.imread(center_image_path)[:, :, 0]
+        X_train[:, :, datum_index] = center_image_matrix
+
+        left_image_filename = driving_log.iloc[measurement_index, 1][5:]  # get rid of " IMG/" in data log
+        left_image_path = os.path.join(image_preproc_dir, left_image_filename)
+        left_image_matrix = cv2.imread(left_image_path)[:, :, 0]
+        X_train[:, :, datum_index + 1] = left_image_matrix
+
+        right_image_filename = driving_log.iloc[measurement_index, 2][5:]  # get rid of " IMG/" in data log
+        right_image_path = os.path.join(image_preproc_dir, right_image_filename)
+        right_image_matrix = cv2.imread(right_image_path)[:, :, 0]
+        X_train[:, :, datum_index + 2] = right_image_matrix
+
+        measurement_index += 1
+        print('processed ', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
+
+    pickle_data = {'features': X_train, 'labels': y_train}
+    pickle.dump(pickle_data, open(os.path.join(image_preproc_dir, "pickle_data.p"), "wb"))
