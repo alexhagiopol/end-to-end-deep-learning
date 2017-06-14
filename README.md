@@ -12,10 +12,19 @@ scene in front of the car and the player's controls is modeled by a neural netwo
 
 #### Installation
 
-This procedure was tested on Ubuntu 16.04 and Mac OS X 10.11.6 (El Capitan). GPU-accelerated training is supported on Ubuntu only.
+This procedure was tested on Ubuntu 16.04 (Xenial Xerus) and Mac OS X 10.11.6 (El Capitan). GPU-accelerated training is supported on Ubuntu only.
 Prerequisites: Install Python package dependencies using [my instructions.](https://github.com/alexhagiopol/deep_learning_packages) Then, activate the environment:
 
     source activate deep-learning
+    
+Acquiring the driving simulator and example driving controls dataset:
+
+    wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip
+    unzip linux-sim.zip
+    rm -rf linux-sim.zip
+    wget https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip
+    unzip data.zip
+    rm -rf data.zip
 
 Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration with CUDA v8.0 and cuDNN v5.1:
 
