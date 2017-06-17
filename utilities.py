@@ -6,7 +6,7 @@ import pandas as pd
 import pickle
 
 
-def preprocessing(data_dir_name, image_subdir_name, l_r_correction=0.2):
+def preprocessing(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
@@ -59,18 +59,20 @@ def preprocessing(data_dir_name, image_subdir_name, l_r_correction=0.2):
         y_train[datum_index + 5] = y_train[datum_index + 2]*-1
         X_train[:, :, datum_index + 5] = flipped_right
         measurement_index += 1
-        show_image((2, 3, 1), "left " + str(y_train[datum_index + 1]), left_image_matrix_cropped)
-        show_image((2, 3, 2), "center " + str(y_train[datum_index]), center_image_matrix_cropped)
-        show_image((2, 3, 3), "right " + str(y_train[datum_index + 2]), right_image_matrix_cropped)
-        show_image((2, 3, 4), "left flipped " + str(y_train[datum_index + 4]), flipped_left)
-        show_image((2, 3, 5), "center flipped " + str(y_train[datum_index + 3]), flipped_center)
-        show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
-        plt.show()
-        plt.close()
+        if debug:
+            show_image((2, 3, 1), "left " + str(y_train[datum_index + 1]), left_image_matrix_cropped)
+            show_image((2, 3, 2), "center " + str(y_train[datum_index]), center_image_matrix_cropped)
+            show_image((2, 3, 3), "right " + str(y_train[datum_index + 2]), right_image_matrix_cropped)
+            show_image((2, 3, 4), "left flipped " + str(y_train[datum_index + 4]), flipped_left)
+            show_image((2, 3, 5), "center flipped " + str(y_train[datum_index + 3]), flipped_center)
+            show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
+            plt.show()
+            plt.close()
         print('processed ', measurement_index, ' of ', num_measurements, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
-
+    print('Saving processed data to pickle file in ', data_dir_name, ' directory ...')
     pickle_data = {'features': X_train, 'labels': y_train}
-    pickle.dump(pickle_data, open(os.path.join(data_dir_name, "pickle_data.p"), "wb"))
+    pickle.dump(pickle_data, open(os.path.join(data_dir_name, "pickle_data.p"), "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
+    print("Done.")
 
 
 def show_image(location, title, img, width=None):
