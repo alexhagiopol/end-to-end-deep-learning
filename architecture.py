@@ -3,8 +3,7 @@ from keras.layers import Lambda, Flatten, Dense, Conv2D, ELU, Dropout
 from keras.utils import plot_model
 
 
-def test_model(input_shape=(160, 320, 3)):
-    """Very simple model to test out flow"""
+def test_model(input_shape=(67, 320)):
     # create model
     model = Sequential()
     # normalize pixels to between -1 <= x <= 1
