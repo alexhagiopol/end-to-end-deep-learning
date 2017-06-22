@@ -6,16 +6,18 @@ import pandas as pd
 import pickle
 
 
-def preprocessing(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False):
+def preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False, max_num_measurements=None):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-    image_dir = os.path.join(data_dir_name, image_subdir_name)
-    assert(os.path.exists(image_dir))
-    image_input_dir = 'data/IMG'
+    image_input_dir = os.path.join(data_dir_name, image_subdir_name)
+    assert(os.path.exists(image_input_dir))
     driving_log = pd.read_csv('data/driving_log.csv')
-    num_measurements = driving_log.shape[0]
+    if max_num_measurements:
+        num_measurements = max_num_measurements
+    else:
+        num_measurements = driving_log.shape[0]
     num_images = num_measurements * 6  # * 6 because of left center and right image for each entry and their flipped versions.
     y_train = np.zeros(6 * num_measurements)  # we 6X the number of measurements because we have 3 cameras and we flip each view to generate 6 (images, steering) pairs for each measurement
     X_train = np.zeros((67, 320, num_images))
