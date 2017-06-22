@@ -3,7 +3,7 @@ from keras.layers import Lambda, Flatten, Dense, Conv2D, ELU, Dropout
 from keras.utils import plot_model
 
 
-def test(input_shape=(160, 320, 3)):
+def test_model(input_shape=(160, 320, 3)):
     """Very simple model to test out flow"""
     # create model
     model = Sequential()
