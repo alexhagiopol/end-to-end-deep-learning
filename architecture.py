@@ -26,5 +26,23 @@ def nvidia_model():
     model.add(Dense(50, activation="relu"))
     model.add(Dense(10, activation="relu"))
     model.add(Dense(1))
-    model.compile(optimizer="adam", loss="mse")
+    model.compile(optimizer="adam", loss="mse", metrics=['accuracy'])
+    return model
+
+def nvidia_model_small():
+    """
+    See https://arxiv.org/pdf/1604.07316.pdf
+    """
+    model = Sequential()
+    model.add(Conv2D(8, (5, 5), strides=(2, 2), activation="relu", input_shape=(67, 320, 1)))
+    model.add(Conv2D(12, (5, 5), strides=(2, 2), activation="relu"))
+    model.add(Conv2D(16, (5, 5), strides=(2, 2), activation="relu"))
+    model.add(Conv2D(24, (3, 3), strides=(1, 1), activation="relu"))
+    model.add(Conv2D(24, (3, 3), strides=(1, 1), activation="relu"))
+    model.add(Flatten())
+    model.add(Dense(100, activation="relu"))
+    model.add(Dense(50, activation="relu"))
+    model.add(Dense(10, activation="relu"))
+    model.add(Dense(1))
+    model.compile(optimizer="adam", loss="mse", metrics=['accuracy'])
     return model
