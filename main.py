@@ -8,7 +8,7 @@ from sklearn.utils import shuffle
 if __name__ == "__main__":
     # load data from pickle file
     data_file = 'pickle_data.p'
-    # utilities.preprocess('data', 'images', max_num_measurements=1000)
+    utilities.batch_preprocess('data', 'images', max_num_measurements=1000)
     with open(os.path.join('data', data_file), mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']
@@ -30,6 +30,6 @@ if __name__ == "__main__":
         utilities.show_image((1, 1, 1), 'image at index' + str(i), X[i, :, :], width=3)
     '''
 
-    model = architecture.test_model()
+    model = architecture.test_model_2()
     model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=10)
-    model.save('alex_model.h5')
+    model.save('model.h5')
