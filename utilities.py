@@ -6,7 +6,14 @@ import pandas as pd
 import pickle
 
 
-def preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
+def preprocess(image_matrix):
+    image_matrix_gray = cv2.cvtColor(image_matrix, cv2.COLOR_RGB2GRAY)
+    image_matrix_cropped = image_matrix_gray[70:137, 0:]
+    image_matrix_cropped_normalized = image_matrix_cropped / 255 - 0.5
+    return image_matrix_cropped_normalized
+
+
+def batch_preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
@@ -29,42 +36,39 @@ def preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False
         center_image_filename = driving_log.iloc[measurement_index, 0][4:]  # get rid of "IMG/" in data log
         center_image_path = os.path.join(image_input_dir, center_image_filename)
         center_image_matrix = cv2.imread(center_image_path)
-        center_image_matrix_gray = cv2.cvtColor(center_image_matrix, cv2.COLOR_RGB2GRAY)
-        center_image_matrix_cropped = center_image_matrix_gray[70:137, 0:]
-        X_train[datum_index, :, :] = center_image_matrix_cropped  # center image matrix added to dataset
+        preprocessed_center_image_matrix = preprocess(center_image_matrix)
+        X_train[datum_index, :, :] = preprocessed_center_image_matrix  # center image matrix added to dataset
         # LEFT CAMERA IMAGE
         y_train[datum_index + 1] = driving_log.iloc[measurement_index, 3] + l_r_correction  # left image steering value added to dataset
         left_image_filename = driving_log.iloc[measurement_index, 1][5:]  # get rid of " IMG/" in data log
         left_image_path = os.path.join(image_input_dir, left_image_filename)
         left_image_matrix = cv2.imread(left_image_path)
-        left_image_matrix_gray = cv2.cvtColor(left_image_matrix, cv2.COLOR_RGB2GRAY)
-        left_image_matrix_cropped = left_image_matrix_gray[70:137, 0:]
-        X_train[datum_index + 1, :, :] = left_image_matrix_cropped  # left image matrix added to dataset
+        preprocessed_left_image_matrix = preprocess(left_image_matrix)
+        X_train[datum_index + 1, :, :] = preprocessed_left_image_matrix  # left image matrix added to dataset
         # RIGHT CAMERA IMAGE
         y_train[datum_index + 2] = driving_log.iloc[measurement_index, 3] - l_r_correction  # right image steering value added to dataset
         right_image_filename = driving_log.iloc[measurement_index, 2][5:]  # get rid of " IMG/" in data log
         right_image_path = os.path.join(image_input_dir, right_image_filename)
         right_image_matrix = cv2.imread(right_image_path)
-        right_image_matrix_gray = cv2.cvtColor(right_image_matrix, cv2.COLOR_RGB2GRAY)
-        right_image_matrix_cropped = right_image_matrix_gray[70:137, 0:]
-        X_train[datum_index + 2, :, :] = right_image_matrix_cropped  # right image matrix added to dataset
+        preprocessed_right_image_matrix = preprocess(right_image_matrix)
+        X_train[datum_index + 2, :, :] = preprocessed_right_image_matrix  # right image matrix added to dataset
         # FLIPPED CENTER CAMERA IMAGE
-        flipped_center = cv2.flip(center_image_matrix_cropped, flipCode=1)
+        flipped_center = cv2.flip(preprocessed_center_image_matrix, flipCode=1)
         y_train[datum_index + 3] = y_train[datum_index]*-1
         X_train[datum_index + 3, :, :] = flipped_center
         # FLIPPED LEFT CAMERA IMAGE
-        flipped_left = cv2.flip(left_image_matrix_cropped, flipCode=1)
+        flipped_left = cv2.flip(preprocessed_left_image_matrix, flipCode=1)
         y_train[datum_index + 4] = y_train[datum_index + 1]*-1
         X_train[datum_index + 4, :, :] = flipped_left
         # FLIPPED RIGHT CAMERA IMAGE
-        flipped_right = cv2.flip(right_image_matrix_cropped, flipCode=1)
+        flipped_right = cv2.flip(preprocessed_right_image_matrix, flipCode=1)
         y_train[datum_index + 5] = y_train[datum_index + 2]*-1
         X_train[datum_index + 5, :, :] = flipped_right
         measurement_index += 1
         if debug:
-            show_image((2, 3, 1), "left " + str(y_train[datum_index + 1]), left_image_matrix_cropped)
-            show_image((2, 3, 2), "center " + str(y_train[datum_index]), center_image_matrix_cropped)
-            show_image((2, 3, 3), "right " + str(y_train[datum_index + 2]), right_image_matrix_cropped)
+            show_image((2, 3, 1), "left " + str(y_train[datum_index + 1]), preprocessed_left_image_matrix)
+            show_image((2, 3, 2), "center " + str(y_train[datum_index]), preprocessed_center_image_matrix)
+            show_image((2, 3, 3), "right " + str(y_train[datum_index + 2]), preprocessed_right_image_matrix)
             show_image((2, 3, 4), "left flipped " + str(y_train[datum_index + 4]), flipped_left)
             show_image((2, 3, 5), "center flipped " + str(y_train[datum_index + 3]), flipped_center)
             show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
