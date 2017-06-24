@@ -11,16 +11,16 @@ def test_model():
     return model
 
 
-def nvidia_model(input_shape=(160, 320, 3)):
+def nvidia_model():
     """
     See https://arxiv.org/pdf/1604.07316.pdf
     """
     model = Sequential()
-    model.add(Conv2D(24, (5, 5), strides= (2, 2), activation="relu", input_shape=(67, 320)))
-    model.add(Conv2D(36, (5, 5), strides= (2, 2), activation="relu"))
-    model.add(Conv2D(48, (5, 5), strides= (2, 2), activation="relu"))
-    model.add(Conv2D(64, (3, 3), strides= (1, 1), activation="relu"))
-    model.add(Conv2D(64, (3, 3), strides= (1, 1), activation="relu"))
+    model.add(Conv2D(24, (5, 5), strides=(2, 2), activation="relu", input_shape=(67, 320, 1)))
+    model.add(Conv2D(36, (5, 5), strides=(2, 2), activation="relu"))
+    model.add(Conv2D(48, (5, 5), strides=(2, 2), activation="relu"))
+    model.add(Conv2D(64, (3, 3), strides=(1, 1), activation="relu"))
+    model.add(Conv2D(64, (3, 3), strides=(1, 1), activation="relu"))
     model.add(Flatten())
     model.add(Dense(100, activation="relu"))
     model.add(Dense(50, activation="relu"))

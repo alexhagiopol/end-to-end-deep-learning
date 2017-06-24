@@ -1,5 +1,6 @@
 import architecture
 import utilities
+import numpy as np
 
 import pickle
 import os
@@ -8,7 +9,7 @@ from sklearn.utils import shuffle
 if __name__ == "__main__":
     # load data from pickle file
     data_file = 'pickle_data.p'
-    # utilities.batch_preprocess('data', 'images', max_num_measurements=8000)
+    utilities.batch_preprocess('data', 'images', max_num_measurements=8000)
     with open(os.path.join('data', data_file), mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']
@@ -25,11 +26,13 @@ if __name__ == "__main__":
     print("train labels data shape", y_train.shape)
     print("test features data shape", X_test.shape)
     print("test labels data shape", y_test.shape)
-    '''
-    for i in range(X_train.shape[0]):
-        utilities.show_image((1, 1, 1), 'image at index' + str(i), X[i, :, :], width=3)
-    '''
-
     model = architecture.nvidia_model()
+    X_train = np.expand_dims(X_train, axis=3)
+    '''
+    print("X_train SHAPE BELOW:")
+    print(X_train.shape)
+    for i in range(X_train.shape[0]):
+        utilities.show_image((1, 1, 1), 'image at index' + str(i), X_train[i, :, :, 0], width=3)
+    '''
     model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=5, batch_size=128)
     model.save('nvidia_model.h5')
