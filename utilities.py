@@ -89,7 +89,7 @@ def batch_preprocess(data_dir_name, image_subdir_names, l_r_correction=0.2, debu
         print('processed ', measurement_index, ' of ', num_measurements, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
     print('Saving processed data to pickle file in ', data_dir_name, ' directory ...')
     pickle_data = {'features': X_train, 'labels': y_train}
-    pickle.dump(pickle_data, open(os.path.join(data_dir_name, "pickle_data.p"), "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
+    pickle.dump(pickle_data, open(os.path.join(data_dir_name, pickle_file_name), "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
     print("Done.")
 
 
