@@ -18,7 +18,7 @@ Prerequisites: Install Python package dependencies using [my instructions.](http
 
     source activate deep-learning
     
-Acquiring the driving simulator and example driving controls dataset:
+Acquiring the driving simulator and example dataset with camera stream images and steering control inputs:
 
     wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip  # linux version
     unzip linux-sim.zip
@@ -36,9 +36,9 @@ Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration
     wget https://www.dropbox.com/s/9uah11bwtsx5fwl/cudnn-8.0-linux-x64-v5.1.tgz?dl=1
     tar -xvzf cudnn-8.0-linux-x64-v5.1.tgz
     cd cuda/lib64
-    export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH  # consider adding this to your ~/.bashrc
     cd ..
-    export CUDA_HOME=`pwd`
+    export CUDA_HOME=`pwd`  # consider adding this to your ~/.bashrc
     sudo apt-get install libcupti-dev
     pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
 
