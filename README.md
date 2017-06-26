@@ -20,20 +20,20 @@ Prerequisites: Install Python package dependencies using [my instructions.](http
     
 Acquiring the driving simulator and example driving controls dataset:
 
-    wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip
+    wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip  # linux version
     unzip linux-sim.zip
     rm -rf linux-sim.zip
-    wget https://d17h27t6h515a5.cloudfront.net/topher/2016/December/584f6edd_data/data.zip
-    unzip data.zip
-    rm -rf data.zip
+    wget https://www.dropbox.com/s/xpmtycm661si5tg/datasets.tar.gz?dl=1
+    tar -xvzf datasets.tar.gz
+    rm -rf datasets.tar.gz
 
 Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration with CUDA v8.0 and cuDNN v5.1:
 
-    wget https://www.dropbox.com/s/08ufs95pw94gu37/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb
+    wget https://www.dropbox.com/s/08ufs95pw94gu37/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb?dl=1
     sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb
     sudo apt-get update
     sudo apt-get install cuda
-    wget https://www.dropbox.com/s/9uah11bwtsx5fwl/cudnn-8.0-linux-x64-v5.1.tgz
+    wget https://www.dropbox.com/s/9uah11bwtsx5fwl/cudnn-8.0-linux-x64-v5.1.tgz?dl=1
     tar -xvzf cudnn-8.0-linux-x64-v5.1.tgz
     cd cuda/lib64
     export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
