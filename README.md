@@ -36,9 +36,9 @@ Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration
     wget https://www.dropbox.com/s/9uah11bwtsx5fwl/cudnn-8.0-linux-x64-v5.1.tgz
     tar -xvzf cudnn-8.0-linux-x64-v5.1.tgz
     cd cuda/lib64
-    export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH  # consider adding this to your ~/.bashrc
     cd ..
-    export CUDA_HOME=`pwd`
+    export CUDA_HOME=`pwd`  # consider adding this to your ~/.bashrc
     sudo apt-get install libcupti-dev
     pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
 
