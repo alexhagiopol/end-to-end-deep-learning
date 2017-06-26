@@ -18,7 +18,7 @@ Prerequisites: Install Python package dependencies using [my instructions.](http
 
     source activate deep-learning
     
-Acquiring the driving simulator and example driving controls dataset:
+Acquiring the driving simulator and example dataset with camera stream images and steering control inputs:
 
     wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip
     unzip linux-sim.zip
