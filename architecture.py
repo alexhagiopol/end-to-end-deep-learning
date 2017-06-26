@@ -13,7 +13,7 @@ def test_model():
 
 def nvidia_model():
     """
-    See https://arxiv.org/pdf/1604.07316.pdf
+    See https://arxiv.org/pdf/1604.07316.pdf. Designed for 3 layer RGB input.
     """
     model = Sequential()
     model.add(Conv2D(24, (5, 5), strides=(2, 2), activation="relu", input_shape=(67, 320, 1)))
@@ -31,7 +31,7 @@ def nvidia_model():
 
 def nvidia_model_small():
     """
-    See https://arxiv.org/pdf/1604.07316.pdf
+    Designed for single layer grayscale input.
     """
     model = Sequential()
     model.add(Conv2D(8, (5, 5), strides=(2, 2), activation="relu", input_shape=(67, 320, 1)))
