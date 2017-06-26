@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import pickle
+import glob
 
 
 def preprocess(image_matrix):
@@ -13,14 +14,25 @@ def preprocess(image_matrix):
     return image_matrix_cropped_normalized
 
 
-def batch_preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
+def batch_preprocess(data_dir_name, image_subdir_names, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-    image_input_dir = os.path.join(data_dir_name, image_subdir_name)
-    assert(os.path.exists(image_input_dir))
-    driving_log = pd.read_csv('data/driving_log.csv')
+    driving_log = None
+    for image_subdir_name in image_subdir_names:
+        image_input_dir = os.path.join(data_dir_name, image_subdir_name)
+        assert(os.path.exists(image_input_dir))
+        current_log_path = os.path.join(image_input_dir, 'log')
+        assert(os.path.exists(current_log_path))
+        current_log_file_list = glob.glob(os.path.join(current_log_path, '*.csv'))
+        assert(len(current_log_file_list) == 1)
+        current_log_file = current_log_file_list[0]
+        if driving_log is not None:
+            driving_log = pd.read_csv(current_log_file)
+        else:
+            current_driving_log = pd.read_csv(current_log_file)
+            driving_log = pd.concat([driving_log, current_driving_log])
     if max_num_measurements:
         num_measurements = max_num_measurements
     else:
