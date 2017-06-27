@@ -29,7 +29,7 @@ def batch_preprocess(data_dir_name, image_subdir_names, l_r_correction=0.2, debu
         assert(len(current_log_file_list) == 1)
         current_log_file = current_log_file_list[0]
         if driving_log is not None:
-            driving_log = pd.read_csv(current_log_file)
+            driving_log = pd.read_csv(current_log_file, header=None)
         else:
             current_driving_log = pd.read_csv(current_log_file)
             driving_log = pd.concat([driving_log, current_driving_log])

@@ -6,7 +6,7 @@ if __name__ == "__main__":
         print("Please provide log file to fix \n Example: python fix_filenames.py my_log.csv")
     else:
         csv_path = sys.argv[1]
-        driving_log = pd.read_csv(csv_path)
+        driving_log = pd.read_csv(csv_path, header=None)
         num_records = driving_log.shape[0]
         record_index = 0
         while record_index < num_records:
@@ -20,6 +20,6 @@ if __name__ == "__main__":
             driving_log.iloc[record_index, 2] = right_file_path[-33:]
             record_index += 1
         print("Overwriting CSV file: ", csv_path)
-        driving_log.to_csv(csv_path)
+        driving_log.to_csv(csv_path, header=None, index=False)
         print("Done.")
 
