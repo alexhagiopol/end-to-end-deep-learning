@@ -49,6 +49,7 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
         y_train[datum_index + 1] = driving_log.iloc[measurement_index, 3] + l_r_correction  # left image steering value added to dataset
         left_image_filename = driving_log.iloc[measurement_index, 1]
         left_image_path = os.path.join(image_input_dir, left_image_filename)
+        print("Using left image path", left_image_path)
         left_image_matrix = cv2.imread(left_image_path)
         preprocessed_left_image_matrix = preprocess(left_image_matrix)
         X_train[datum_index + 1, :, :] = preprocessed_left_image_matrix  # left image matrix added to dataset
@@ -56,6 +57,7 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
         y_train[datum_index + 2] = driving_log.iloc[measurement_index, 3] - l_r_correction  # right image steering value added to dataset
         right_image_filename = driving_log.iloc[measurement_index, 2]
         right_image_path = os.path.join(image_input_dir, right_image_filename)
+        print("Using right image path", right_image_path)
         right_image_matrix = cv2.imread(right_image_path)
         preprocessed_right_image_matrix = preprocess(right_image_matrix)
         X_train[datum_index + 2, :, :] = preprocessed_right_image_matrix  # right image matrix added to dataset
@@ -82,9 +84,8 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
             plt.show()
             plt.close()
         print('processed ', measurement_index, ' of ', num_measurements, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
-    print('Saving processed data to pickle file in ', data_dir_name, ' directory ...')
     pickle_data = {'features': X_train, 'labels': y_train}
-    pickle.dump(pickle_data, open(os.path.join(data_dir_name, pickle_file_name), "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
+    pickle.dump(pickle_data, open(pickle_file_name, "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
     print("Done.")
 
 

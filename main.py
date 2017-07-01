@@ -11,8 +11,8 @@ if __name__ == "__main__":
     data_file = 'pickle_data.p'
     dir_path = os.path.dirname(os.path.realpath(__file__))
     image_dir_name = 'ian_driving_dataset'
-    utilities.batch_preprocess(image_dir_name, max_num_measurements=None)
-    with open(os.path.join('data', data_file), mode='rb') as f:
+    utilities.batch_preprocess(image_dir_name, max_num_measurements=50, pickle_file_name=data_file)
+    with open(data_file, mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']
     y = pickle_data['labels']
