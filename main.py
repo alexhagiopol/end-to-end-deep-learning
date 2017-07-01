@@ -10,9 +10,8 @@ if __name__ == "__main__":
     # load data from pickle file
     data_file = 'pickle_data.p'
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    data_dir_name = 'data'
-    image_subdir_name = 'combined'
-    utilities.batch_preprocess(data_dir_name, image_subdir_name, max_num_measurements=None)
+    image_dir_name = 'ian_driving_dataset'
+    utilities.batch_preprocess(image_dir_name, max_num_measurements=None)
     with open(os.path.join('data', data_file), mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']

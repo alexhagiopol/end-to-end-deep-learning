@@ -14,12 +14,12 @@ def preprocess(image_matrix):
     return image_matrix_cropped_normalized
 
 
-def batch_preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
+def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-    image_input_dir = os.path.join(data_dir_name, image_subdir_name)
+
     assert(os.path.exists(image_input_dir))
     print("Using image input dir", image_input_dir)
     log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
