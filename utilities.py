@@ -14,25 +14,19 @@ def preprocess(image_matrix):
     return image_matrix_cropped_normalized
 
 
-def batch_preprocess(data_dir_name, image_subdir_names, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
+def batch_preprocess(data_dir_name, image_subdir_name, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-    driving_log = None
-    for image_subdir_name in image_subdir_names:
-        image_input_dir = os.path.join(data_dir_name, image_subdir_name)
-        assert(os.path.exists(image_input_dir))
-        current_log_path = os.path.join(image_input_dir, 'log')
-        assert(os.path.exists(current_log_path))
-        current_log_file_list = glob.glob(os.path.join(current_log_path, '*.csv'))
-        assert(len(current_log_file_list) == 1)
-        current_log_file = current_log_file_list[0]
-        if driving_log is not None:
-            driving_log = pd.read_csv(current_log_file, header=None)
-        else:
-            current_driving_log = pd.read_csv(current_log_file)
-            driving_log = pd.concat([driving_log, current_driving_log])
+    image_input_dir = os.path.join(data_dir_name, image_subdir_name)
+    assert(os.path.exists(image_input_dir))
+    print("Using image input dir", image_input_dir)
+    log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
+    assert(len(log_file_list) == 1)
+    log_file = log_file_list[0]
+    print("Using log file", log_file)
+    driving_log = pd.read_csv(log_file, header=None)
     if max_num_measurements:
         num_measurements = max_num_measurements
     else:
@@ -45,21 +39,22 @@ def batch_preprocess(data_dir_name, image_subdir_names, l_r_correction=0.2, debu
         datum_index = measurement_index * 6
         # CENTER CAMERA IMAGE
         y_train[datum_index] = driving_log.iloc[measurement_index, 3]  # center image steering value added to dataset
-        center_image_filename = driving_log.iloc[measurement_index, 0][4:]  # get rid of "IMG/" in data log
+        center_image_filename = driving_log.iloc[measurement_index, 0]
         center_image_path = os.path.join(image_input_dir, center_image_filename)
+        print("Using center image path", center_image_path)
         center_image_matrix = cv2.imread(center_image_path)
         preprocessed_center_image_matrix = preprocess(center_image_matrix)
         X_train[datum_index, :, :] = preprocessed_center_image_matrix  # center image matrix added to dataset
         # LEFT CAMERA IMAGE
         y_train[datum_index + 1] = driving_log.iloc[measurement_index, 3] + l_r_correction  # left image steering value added to dataset
-        left_image_filename = driving_log.iloc[measurement_index, 1][5:]  # get rid of " IMG/" in data log
+        left_image_filename = driving_log.iloc[measurement_index, 1]
         left_image_path = os.path.join(image_input_dir, left_image_filename)
         left_image_matrix = cv2.imread(left_image_path)
         preprocessed_left_image_matrix = preprocess(left_image_matrix)
         X_train[datum_index + 1, :, :] = preprocessed_left_image_matrix  # left image matrix added to dataset
         # RIGHT CAMERA IMAGE
         y_train[datum_index + 2] = driving_log.iloc[measurement_index, 3] - l_r_correction  # right image steering value added to dataset
-        right_image_filename = driving_log.iloc[measurement_index, 2][5:]  # get rid of " IMG/" in data log
+        right_image_filename = driving_log.iloc[measurement_index, 2]
         right_image_path = os.path.join(image_input_dir, right_image_filename)
         right_image_matrix = cv2.imread(right_image_path)
         preprocessed_right_image_matrix = preprocess(right_image_matrix)

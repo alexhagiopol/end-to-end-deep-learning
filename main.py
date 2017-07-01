@@ -9,7 +9,10 @@ from sklearn.utils import shuffle
 if __name__ == "__main__":
     # load data from pickle file
     data_file = 'pickle_data.p'
-    utilities.batch_preprocess('data', ['ian_dataset_0', 'ian_dataset_1'], max_num_measurements=None)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    data_dir_name = 'data'
+    image_subdir_name = 'combined'
+    utilities.batch_preprocess(data_dir_name, image_subdir_name, max_num_measurements=None)
     with open(os.path.join('data', data_file), mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']
