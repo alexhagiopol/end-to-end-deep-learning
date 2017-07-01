@@ -18,12 +18,12 @@ Prerequisites: Install Python package dependencies using [my instructions.](http
 
     source activate deep-learning
     
-Acquiring the driving simulator and example dataset with camera stream images and steering control inputs:
+Acquiring the driving simulator and example dataset with camera stream images and steering control inputs by helicopter pilot Ian Smith:
 
     wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip  # linux version of simulator
     unzip linux-sim.zip
     rm -rf linux-sim.zip
-    wget -O datasets.tar.gz "https://www.dropbox.com/s/xpmtycm661si5tg/datasets.tar.gz?dl=1"  # example datasets
+    wget -O datasets.tar.gz "https://www.dropbox.com/s/zyc8g1swfdrszxv/ian_driving_dataset.tar.gz?dl=1"  # example dataset
     tar -xvzf datasets.tar.gz
     rm -rf datasets.tar.gz
 
