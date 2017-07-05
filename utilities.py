@@ -43,8 +43,11 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
         center_image_path = os.path.join(image_input_dir, center_image_filename)
         print("Using center image path", center_image_path)
         center_image_matrix = cv2.imread(center_image_path)
+        # RGB_center_image_matrix = cv2.cvtColor(center_image_matrix, cv2.COLOR_BGR2RGB)
         preprocessed_center_image_matrix = preprocess(center_image_matrix)
         X_train[datum_index, :, :] = preprocessed_center_image_matrix  # center image matrix added to dataset
+        # if center_image_filename == 'center_2017_06_14_11_26_17_815.jpg':
+        #    show_image((1, 1, 1), "center_2017_06_14_11_26_17_815.jpg", RGB_center_image_matrix, 1)
         # LEFT CAMERA IMAGE
         y_train[datum_index + 1] = driving_log.iloc[measurement_index, 3] + l_r_correction  # left image steering value added to dataset
         left_image_filename = driving_log.iloc[measurement_index, 1]
