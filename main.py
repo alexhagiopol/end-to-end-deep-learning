@@ -10,8 +10,8 @@ if __name__ == "__main__":
     # load data from pickle file
     data_file = 'pickle_data.p'
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    image_dir_name = 'ian_driving_dataset'
-    utilities.batch_preprocess(image_dir_name, max_num_measurements=50, pickle_file_name=data_file)
+    image_dir_name = 'udacity_dataset'
+    utilities.batch_preprocess(image_dir_name, max_num_measurements=None, pickle_file_name=data_file)
     with open(data_file, mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']
@@ -36,5 +36,5 @@ if __name__ == "__main__":
     for i in range(X_train.shape[0]):
         utilities.show_image((1, 1, 1), 'image at index' + str(i), X_train[i, :, :, 0], width=3)
     '''
-    model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=10, batch_size=1024)
+    model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=30, batch_size=1024)
     model.save('model.h5')

@@ -14,6 +14,23 @@ def preprocess(image_matrix):
     return image_matrix_cropped_normalized
 
 
+def preprocess_laplacian(image_matrix, debug=False):
+    image_matrix_cropped = image_matrix[70:137, 0:, :]
+    laplacian = np.empty_like(image_matrix_cropped)
+    laplacian[:, :, 0] = np.absolute(cv2.Laplacian(image_matrix_cropped[:, :, 0], cv2.CV_64F))
+    if debug:
+        show_image((1, 1, 1), "laplacian 0", laplacian[:, :, 0], 1)
+    laplacian[:, :, 1] = np.absolute(cv2.Laplacian(image_matrix_cropped[:, :, 1], cv2.CV_64F))
+    if debug:
+        show_image((1, 1, 1), "laplacian 0", laplacian[:, :, 1], 1)
+    laplacian[:, :, 2] = np.absolute(cv2.Laplacian(image_matrix_cropped[:, :, 2], cv2.CV_64F))
+    if debug:
+        show_image((1, 1, 1), "laplacian 0", laplacian[:, :, 2], 1)
+    laplacian_max = np.amax(laplacian, 2)
+    laplacian_normalized = laplacian_max / (255) - 0.5
+    return(laplacian_normalized)
+
+
 def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
@@ -43,6 +60,9 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
         center_image_path = os.path.join(image_input_dir, center_image_filename)
         print("Using center image path", center_image_path)
         center_image_matrix = cv2.imread(center_image_path)
+        RGB_center_image_matrix = cv2.cvtColor(center_image_matrix, cv2.COLOR_BGR2RGB)
+        #if center_image_filename == 'center_2017_06_14_11_26_17_815.jpg':
+        #    debug = True
         preprocessed_center_image_matrix = preprocess(center_image_matrix)
         X_train[datum_index, :, :] = preprocessed_center_image_matrix  # center image matrix added to dataset
         # LEFT CAMERA IMAGE
