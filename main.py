@@ -11,7 +11,7 @@ if __name__ == "__main__":
     data_file = 'pickle_data.p'
     dir_path = os.path.dirname(os.path.realpath(__file__))
     image_dir_name = 'udacity_dataset'
-    utilities.batch_preprocess(image_dir_name, max_num_measurements=None, pickle_file_name=data_file)
+    utilities.batch_preprocess(image_dir_name, max_num_measurements=1000, pickle_file_name=data_file)
     with open(data_file, mode='rb') as f:
         pickle_data = pickle.load(f)
     X = pickle_data['features']
@@ -20,16 +20,16 @@ if __name__ == "__main__":
     print("features data shape", X.shape)
     print("labels data shape", y.shape)
     X, y = shuffle(X, y, random_state=0)
-    X_train = X[0:int(0.9 * X.shape[0]), :, :]
+    X_train = X[0:int(0.9 * X.shape[0]), :, :, :]
     y_train = y[0:int(0.9 * y.shape[0])]
-    X_test = X[int(0.9 * X.shape[0]):, :, :]
+    X_test = X[int(0.9 * X.shape[0]):, :, :, :]
     y_test = y[int(0.9 * y.shape[0]):]
     print("train features data shape", X_train.shape)
     print("train labels data shape", y_train.shape)
     print("test features data shape", X_test.shape)
     print("test labels data shape", y_test.shape)
-    model = architecture.nvidia_model_small()
-    X_train = np.expand_dims(X_train, axis=3)
+    model = architecture.nvidia_model()
+    #X_train = np.expand_dims(X_train, axis=3)  # needed for compatibility with 1D images
     '''
     print("X_train SHAPE BELOW:")
     print(X_train.shape)
