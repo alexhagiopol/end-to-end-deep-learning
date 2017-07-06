@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # load data from pickle file
     data_file = 'pickle_data.p'
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    image_dir_name = 'ian_driving_dataset'
+    image_dir_name = 'udacity_dataset'
     utilities.batch_preprocess(image_dir_name, max_num_measurements=None, pickle_file_name=data_file)
     with open(data_file, mode='rb') as f:
         pickle_data = pickle.load(f)

@@ -18,14 +18,14 @@ Prerequisites: Install Python package dependencies using [my instructions.](http
 
     source activate deep-learning
     
-Acquiring the driving simulator and example dataset with camera stream images and steering control inputs by helicopter pilot Ian Smith:
+Acquiring the driving simulator and example dataset with camera stream images and steering control inputs by a human pilot:
 
     wget https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip  # linux version of simulator
     unzip linux-sim.zip
     rm -rf linux-sim.zip
-    wget -O datasets.tar.gz "https://www.dropbox.com/s/zyc8g1swfdrszxv/ian_driving_dataset.tar.gz?dl=1"  # example dataset
-    tar -xvzf datasets.tar.gz
-    rm -rf datasets.tar.gz
+    wget -O udacity_dataset.tar.gz "https://www.dropbox.com/s/s4q0y0zq8xrxopi/udacity_dataset.tar.gz?dl=1"  # example dataset
+    tar -xvzf udacity_dataset.tar.gz
+    rm -rf udacity_dataset.tar.gz
 
 Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration with CUDA v8.0 and cuDNN v5.1:
 
