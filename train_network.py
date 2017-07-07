@@ -1,26 +1,9 @@
 import architecture
 import utilities
-import sys
 import argparse
 
-if __name__ == "__main__":
-    '''
-    if len(sys.argv) < 4 or len(sys.argv) > 5:
-        print("Incorrect syntax.")
-        print("Example syntax: python train_network.py udacity_dataset model.h5 3000")
-        print("Randomizing the order of your dataset is recommended especially when training for the first time after recording the dataset.")
-        print("Optional syntax: python train_network.py udacity_dataset model.h5 3000 randomize")
-        sys.exit()
-    # get arguments from user
-    args.__dict__['dataset_directory'] = sys.argv[1]
-    model_path = sys.argv[2]
-   args.__dict__['cpu-batch-size'] = int(sys.argv[3])
-    if len(sys.argv) == 5 and sys.argv[4] == 'randomize':
-        dataset_log_path = utilities.get_driving_log_path(args.__dict__['dataset_directory'])
-        print("Randomizing dataset at", dataset_log_path)
-        utilities.randomize_dataset_csv(dataset_log_path)
-    '''
 
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Train a neural network to autonomously drive a virtual car. Example syntax:\n\npython train_network.py -d udacity_dataset -m model.h5')
     parser.add_argument('--dataset-directory', '-d', dest='dataset_directory', type=str, required=True, help='Required string: Directory containing driving log and images.')
     parser.add_argument('--model-path', '-m', dest='model_path', type=str, required=True, help='Required string: Name of model e.g model.h5.')
@@ -28,12 +11,10 @@ if __name__ == "__main__":
     parser.add_argument('--gpu-batch-size', '-g', dest='gpu_batch_size', type=int, required=False, default=512, help='Optional integer: Image batch size that fits in VRAM. Default 512.')
     parser.add_argument('--randomize', '-r', dest='randomize', type=bool, required=False, default=False, help='Optional boolean: Randomize and overwrite driving log. Default False.')
     args = parser.parse_args()
-
     if args.randomize:
         dataset_log_path = utilities.get_driving_log_path(args.dataset_directory)
         print("Randomizing dataset at", dataset_log_path)
         utilities.randomize_dataset_csv(dataset_log_path)
-
     measurement_index = 0  # index of measurements in dataset
     dataset_log = utilities.get_dataset_from_csv(args.dataset_directory)
     dataset_size = dataset_log.shape[0]
