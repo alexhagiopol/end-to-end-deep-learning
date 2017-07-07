@@ -16,7 +16,7 @@ def nvidia_model():
     See https://arxiv.org/pdf/1604.07316.pdf. Designed for 3 layer RGB input.
     """
     model = Sequential()
-    model.add(Conv2D(24, (5, 5), strides=(2, 2), activation="relu", input_shape=(67, 320, 1)))
+    model.add(Conv2D(24, (5, 5), strides=(2, 2), activation="relu", input_shape=(67, 320, 3)))
     model.add(Conv2D(36, (5, 5), strides=(2, 2), activation="relu"))
     model.add(Conv2D(48, (5, 5), strides=(2, 2), activation="relu"))
     model.add(Conv2D(64, (3, 3), strides=(1, 1), activation="relu"))
