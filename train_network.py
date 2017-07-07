@@ -6,9 +6,9 @@ import sys
 if __name__ == "__main__":
     if len(sys.argv) < 4 or len(sys.argv) > 5:
         print("Incorrect syntax.")
-        print("Example syntax: python main.py udacity_dataset model.h5 3000")
+        print("Example syntax: python train_network.py udacity_dataset model.h5 3000")
         print("Randomizing the order of your dataset is recommended especially when training for the first time after recording the dataset.")
-        print("Optional syntax: python main.py udacity_dataset model.h5 3000 randomize")
+        print("Optional syntax: python train_network.py udacity_dataset model.h5 3000 randomize")
         sys.exit()
     # get arguments from user
     image_input_dir = sys.argv[1]
