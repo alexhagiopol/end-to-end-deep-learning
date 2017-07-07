@@ -37,6 +37,14 @@ def preprocess_laplacian(image_matrix, debug=False):
     return(laplacian_normalized)
 
 
+def randomize_dataset_csv(csv_path):
+    driving_log = pd.read_csv(csv_path, header=None)
+    driving_log = driving_log.sample(frac=1).reset_index(drop=True)
+    print("Overwriting CSV file: ", csv_path)
+    driving_log.to_csv(csv_path, header=None, index=False)
+    print("Done.")
+
+
 def get_dataset_from_csv(image_input_dir):
     assert (os.path.exists(image_input_dir))
     log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
