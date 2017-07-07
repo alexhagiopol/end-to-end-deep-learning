@@ -1,21 +1,23 @@
 import architecture
 import utilities
 import sys
-import numpy as np
-import os
-from sklearn.utils import shuffle
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 4 or len(sys.argv) > 5:
         print("Incorrect syntax.")
         print("Example syntax: python main.py udacity_dataset model.h5 3000")
+        print("Randomizing the order of your dataset is recommended especially when training for the first time after recording the dataset.")
+        print("Optional syntax: python main.py udacity_dataset model.h5 3000 randomize")
         sys.exit()
-
     # get arguments from user
     image_input_dir = sys.argv[1]
     model_path = sys.argv[2]
     batch_size = int(sys.argv[3])
+    if len(sys.argv) == 5 and sys.argv[4] == 'randomize':
+        dataset_log_path = utilities.get_driving_log_path(image_input_dir)
+        print("Randomizing dataset at", dataset_log_path)
+        utilities.randomize_dataset_csv(dataset_log_path)
     measurement_index = 0  # index of measurements in dataset
     dataset_log = utilities.get_dataset_from_csv(image_input_dir)
     dataset_size = dataset_log.shape[0]
