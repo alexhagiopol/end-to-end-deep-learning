@@ -1,6 +1,6 @@
 ## End-to-End Learning in a Driving Simulation
 
-#### Abstract
+### Abstract
 
 This project implements NVIDIA's 2016 paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
 Bojarski et al. describe a convolutional neural network architecture used to infer vehicle control inputs given a forward 
@@ -11,7 +11,7 @@ scene in front of the car and the player's controls is modeled by a neural netwo
 ![nvidia demo](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/nvidia_demo.gif)
 ![manual_diving_example](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/manual_driving_example.gif)
 
-#### Installation
+### Installation
 
 This procedure was tested on Ubuntu 16.04 (Xenial Xerus) and Mac OS X 10.11.6 (El Capitan). GPU-accelerated training is supported on Ubuntu only.
 Prerequisites: Install Python package dependencies using [my instructions.](https://github.com/alexhagiopol/deep_learning_packages) Then, activate the environment:
@@ -42,8 +42,8 @@ Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration
     sudo apt-get install libcupti-dev
     pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
 
-#### Execution
-### Model Training with `train_network.py`
+### Execution
+#### Model Training with `train_network.py`
 
 This file is the core of this project. Use it to train the NVIDIA model on a driving dataset. Use `python train_network.py -h`
 to see documentation information. Example command:
@@ -80,7 +80,7 @@ Select the lowest resolution and fastest graphical settings. Afterward select "a
 will now drive on its own. This procedure loads the trained model and uses the model to make predictions on individual images in real-time 
 and send the predicted angle back to the simulator server via a websocket connection.
 
-##### Saving a video of the autonomous agent
+#### Saving a video of the autonomous agent
 
 ```sh
 python drive.py model.h5 run1
