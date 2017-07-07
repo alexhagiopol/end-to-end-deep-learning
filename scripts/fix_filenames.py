@@ -1,7 +1,6 @@
 import pandas as pd
 import sys
-import numpy as np
-import math
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
