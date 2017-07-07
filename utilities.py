@@ -37,12 +37,28 @@ def preprocess_laplacian(image_matrix, debug=False):
     return(laplacian_normalized)
 
 
-def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_measurements=None, pickle_file_name='pickle_data.p'):
+def get_dataset_from_csv(image_input_dir):
+    assert (os.path.exists(image_input_dir))
+    log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
+    assert (len(log_file_list) == 1)
+    log_file = log_file_list[0]
+    print("Reading from CSV log file", log_file)
+    driving_log = pd.read_csv(log_file, header=None)
+    return driving_log
+
+
+def get_dataset_from_pickle(pickle_file_path):
+    with open(pickle_file_path, mode='rb') as f:
+        pickle_data = pickle.load(f)
+    return pickle_data
+
+
+def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measurement_range=None):
     """
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-
+    '''
     assert(os.path.exists(image_input_dir))
     print("Using image input dir", image_input_dir)
     log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
@@ -50,21 +66,28 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
     log_file = log_file_list[0]
     print("Using log file", log_file)
     driving_log = pd.read_csv(log_file, header=None)
-    if max_num_measurements:
-        num_measurements = max_num_measurements
+    '''
+    driving_log = get_dataset_from_csv(image_input_dir)
+    if measurement_range[0]:
+        measurement_index = measurement_range[0]
+    else:
+        measurement_index = 0
+    if measurement_range[1]:
+        num_measurements = measurement_range[1]
     else:
         num_measurements = driving_log.shape[0]
-    num_images = num_measurements * 6  # * 6 because of left center and right image for each entry and their flipped versions.
+    assert(measurement_index < num_measurements)
+    num_images = (num_measurements - measurement_index) * 6  # * 6 because of left center and right image for each entry and their flipped versions.
     y_train = np.zeros(6 * num_measurements)  # we 6X the number of measurements because we have 3 cameras and we flip each view to generate 6 (images, steering) pairs for each measurement
     X_train = np.zeros((num_images, 67, 320, 3))
-    measurement_index = 0
     while measurement_index < num_measurements:
         datum_index = measurement_index * 6
         # CENTER CAMERA IMAGE
         y_train[datum_index] = driving_log.iloc[measurement_index, 3]  # center image steering value added to dataset
         center_image_filename = driving_log.iloc[measurement_index, 0]
         center_image_path = os.path.join(image_input_dir, center_image_filename)
-        print("Using center image path", center_image_path)
+        if debug:
+            print("Using center image path", center_image_path)
         center_image_matrix = cv2.imread(center_image_path)
         #RGB_center_image_matrix = cv2.cvtColor(center_image_matrix, cv2.COLOR_BGR2RGB)
         #if center_image_filename == 'center_2017_06_14_11_26_17_815.jpg':
@@ -75,7 +98,8 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
         y_train[datum_index + 1] = driving_log.iloc[measurement_index, 3] + l_r_correction  # left image steering value added to dataset
         left_image_filename = driving_log.iloc[measurement_index, 1]
         left_image_path = os.path.join(image_input_dir, left_image_filename)
-        print("Using left image path", left_image_path)
+        if debug:
+            print("Using left image path", left_image_path)
         left_image_matrix = cv2.imread(left_image_path)
         preprocessed_left_image_matrix = preprocess_color(left_image_matrix)
         X_train[datum_index + 1, :, :, :] = preprocessed_left_image_matrix  # left image matrix added to dataset
@@ -83,7 +107,8 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
         y_train[datum_index + 2] = driving_log.iloc[measurement_index, 3] - l_r_correction  # right image steering value added to dataset
         right_image_filename = driving_log.iloc[measurement_index, 2]
         right_image_path = os.path.join(image_input_dir, right_image_filename)
-        print("Using right image path", right_image_path)
+        if debug:
+            print("Using right image path", right_image_path)
         right_image_matrix = cv2.imread(right_image_path)
         preprocessed_right_image_matrix = preprocess_color(right_image_matrix)
         X_train[datum_index + 2, :, :, :] = preprocessed_right_image_matrix  # right image matrix added to dataset
@@ -109,9 +134,14 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, max_num_m
             show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
             plt.show()
             plt.close()
-        print('processed ', measurement_index, ' of ', num_measurements, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
-    pickle_data = {'features': X_train, 'labels': y_train}
-    pickle.dump(pickle_data, open(pickle_file_name, "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
+        print('Pre-processed ', measurement_index, ' of ', num_measurements, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
+    preprocessed_dataset = {'features': X_train, 'labels': y_train}
+    return preprocessed_dataset
+
+
+def save_dict_to_pickle(dataset, file_path):
+    print("Saving data to", file_path, "...")
+    pickle.dump(dataset, open(file_path, "wb"), protocol=4)  # protocol=4 allows file sizes > 4GB
     print("Done.")
 
 
