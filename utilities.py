@@ -73,15 +73,16 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
     else:
         measurement_index = 0
     if measurement_range[1]:
-        num_measurements = measurement_range[1]
+        max_measurement_index = measurement_range[1]
     else:
-        num_measurements = driving_log.shape[0]
-    assert(measurement_index < num_measurements)
-    num_images = (num_measurements - measurement_index) * 6  # * 6 because of left center and right image for each entry and their flipped versions.
-    y_train = np.zeros(6 * num_measurements)  # we 6X the number of measurements because we have 3 cameras and we flip each view to generate 6 (images, steering) pairs for each measurement
+        max_measurement_index = driving_log.shape[0]
+    assert(measurement_index < max_measurement_index)
+    num_measurements = max_measurement_index - measurement_index
+    num_images = num_measurements * 6  # * 6 because of left center and right image for each entry and their flipped versions.
+    y_train = np.zeros(num_images)  # we 6X the number of measurements because we have 3 cameras and we flip each view to generate 6 (images, steering) pairs for each measurement
     X_train = np.zeros((num_images, 67, 320, 3))
-    while measurement_index < num_measurements:
-        datum_index = measurement_index * 6
+    while measurement_index < max_measurement_index:
+        datum_index = (measurement_index - measurement_range[0]) * 6
         # CENTER CAMERA IMAGE
         y_train[datum_index] = driving_log.iloc[measurement_index, 3]  # center image steering value added to dataset
         center_image_filename = driving_log.iloc[measurement_index, 0]
@@ -134,7 +135,7 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
             show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
             plt.show()
             plt.close()
-        print('Pre-processed ', measurement_index, ' of ', num_measurements, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
+        print('Pre-processed ', measurement_index, ' of ', max_measurement_index, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
     preprocessed_dataset = {'features': X_train, 'labels': y_train}
     return preprocessed_dataset
 

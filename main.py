@@ -10,6 +10,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("Incorrect syntax.")
         print("Example syntax: python main.py udacity_dataset model.h5 3000")
+        sys.exit()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     image_input_dir = sys.argv[1]
     model_name = sys.argv[2]
@@ -24,10 +25,10 @@ if __name__ == "__main__":
     while measurement_index < dataset_size:
         end_index = measurement_index + batch_size
         if end_index < dataset_size:
-            print("Processing from index", measurement_index, "to index", end_index)
+            print("Pre-processing from index", measurement_index, "to index", end_index)
             preprocessed_batch = utilities.batch_preprocess(image_input_dir, measurement_range=(measurement_index, end_index))
         else:
-            print("Processing from index", measurement_index, "to index", dataset_size)
+            print("Pre-processing from index", measurement_index, "to index", dataset_size)
             preprocessed_batch = utilities.batch_preprocess(image_input_dir, measurement_range=(measurement_index, None))
         X_batch = preprocessed_batch['features']
         y_batch = preprocessed_batch['labels']
@@ -48,6 +49,5 @@ if __name__ == "__main__":
             y_valid_master = np.concatenate((y_valid_master, y_valid_batch), axis=0)
             print("Updated master validation set. Shape =", X_valid_master.shape)
         model.fit(X_train_batch, y_train_batch, validation_data=(X_valid_master, y_valid_master), shuffle=True, nb_epoch=15, batch_size=1024)
+        measurement_index += batch_size
     model.save('model.h5')
-
-
