@@ -71,15 +71,6 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-    '''
-    assert(os.path.exists(image_input_dir))
-    print("Using image input dir", image_input_dir)
-    log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
-    assert(len(log_file_list) == 1)
-    log_file = log_file_list[0]
-    print("Using log file", log_file)
-    driving_log = pd.read_csv(log_file, header=None)
-    '''
     driving_log = get_dataset_from_csv(image_input_dir)
     if measurement_range[0]:
         measurement_index = measurement_range[0]
@@ -103,9 +94,6 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
         if debug:
             print("Using center image path", center_image_path)
         center_image_matrix = cv2.imread(center_image_path)
-        #RGB_center_image_matrix = cv2.cvtColor(center_image_matrix, cv2.COLOR_BGR2RGB)
-        #if center_image_filename == 'center_2017_06_14_11_26_17_815.jpg':
-        #    debug = True
         preprocessed_center_image_matrix = preprocess_color(center_image_matrix)
         X_train[datum_index, :, :, :] = preprocessed_center_image_matrix  # center image matrix added to dataset
         # LEFT CAMERA IMAGE

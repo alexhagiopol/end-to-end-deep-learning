@@ -47,7 +47,7 @@ class SimplePIController:
 
 
 controller = SimplePIController(0.1, 0.002)
-set_speed = 10
+set_speed = 5
 controller.set_desired(set_speed)
 
 @sio.on('telemetry')
@@ -62,7 +62,6 @@ def telemetry(sid, data):
         # The current image from the center camera of the car
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
-        #image_array = np.expand_dims(utilities.preprocess(np.asarray(image)), axis=2)  # needed for compatibility with 1D images
         image_array = utilities.preprocess_color(np.asarray(image))
         steering_angle = float(model.predict(image_array[None, :, :], batch_size=1))
 
