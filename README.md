@@ -117,6 +117,10 @@ A human player plays the simulation game manually and records game footage that 
 On each animation frame of the simulator, three virtual cameras on the front of the car capture 3 images into the dataset: 
 a center image, a left side image, and a right side image. 
 
+Left View| Center View | Right View
+----|--------|-------
+![left](./figures/left.jpg) | ![center](./figures/center.jpg) | ![right](./figures/right.jpg)
+
 #### Preprocessing
 #### Neural Network Architecture and Implementation
 #### Training Procedure
@@ -124,9 +128,5 @@ a center image, a left side image, and a right side image.
 
 Screencap video: https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be
 FPV video: https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be
-
-Left View| Center View | Right View
-----|--------|-------
-![left](./figures/left.jpg) | ![center](./figures/center.png) | ![right](./figures/right.jpg)
 
 #### Conclusions and Future Work
