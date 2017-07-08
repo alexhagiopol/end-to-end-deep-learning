@@ -11,8 +11,8 @@ Once trained, this neural network implementation drives a virtual car for dozens
 human intervention.
 
 
-![nvidia demo](./figures/nvidia_demo.gif)
-![manual_diving_example](./figures/manual_driving_example.gif)
+![nvidia demo](figures/nvidia_demo.gif)
+![manual_diving_example](figures/manual_driving_example.gif)
 
 ### Installation
 
@@ -111,7 +111,7 @@ This will run the video at 48 FPS. The default FPS is 60.
 ### Technical Report
 #### Dataset Creation
 
-![training](./figures/training.gif)
+![training](figures/training.gif)
 
 A human player plays the simulation game manually and records game footage that is later used to train a neural network.
 On each animation frame of the simulator, three virtual cameras on the front of the car capture 3 images into the dataset: 
@@ -120,7 +120,7 @@ pairs are recorded.
 
 Left Camera View | Center Camera View | Right Camera View
 ----|--------|-------
-![left](./figures/left.jpg) | ![center](./figures/center.jpg) | ![right](./figures/right.jpg)
+![left](figures/left.jpg) | ![center](figures/center.jpg) | ![right](figures/right.jpg)
 
 #### Preprocessing
 
@@ -131,7 +131,9 @@ Left Camera View | Center Camera View | Right Camera View
 #### Training Procedure
 #### Results
 
-Full Screen Debug | FPV Feed
+
+
+Autonomous Mode Full Screen Capture | Autonomous Mode FPV Feed
 ---------|----------
 [![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be "Autonomous Mode FPV Demo")
 
