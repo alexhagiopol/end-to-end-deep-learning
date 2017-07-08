@@ -115,16 +115,26 @@ This will run the video at 48 FPS. The default FPS is 60.
 
 A human player plays the simulation game manually and records game footage that is later used to train a neural network.
 On each animation frame of the simulator, three virtual cameras on the front of the car capture 3 images into the dataset: 
-a center image, a left side image, and a right side image. 
+a center image, a left side image, and a right side image. Over the course of gameplay, tens of thousands of (image, steering input)
+pairs are recorded.
 
-Left View| Center View | Right View
+Left Camera View | Center Camera View | Right Camera View
 ----|--------|-------
 ![left](./figures/left.jpg) | ![center](./figures/center.jpg) | ![right](./figures/right.jpg)
 
 #### Preprocessing
+
+
 #### Neural Network Architecture and Implementation
+
+
 #### Training Procedure
 #### Results
+
+Full Screen Debug | FPV Feed
+---------|----------
+[![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be "Autonomous Mode FPV Demo")
+
 
 Screencap video: https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be
 FPV video: https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be
