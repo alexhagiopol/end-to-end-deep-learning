@@ -135,7 +135,7 @@ Left Camera View | Center Camera View | Right Camera View
 
 Autonomous Mode Full Screen Capture | Autonomous Mode FPV Feed
 ---------|----------
-[![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be "Autonomous Mode FPV Demo")
+[![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=xvFVDO90FAk "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg "Autonomous Mode FPV Demo")
 
 
 Screencap video: https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be
