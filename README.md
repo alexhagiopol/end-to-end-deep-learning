@@ -109,4 +109,12 @@ like so:
 This will run the video at 48 FPS. The default FPS is 60.
 
 ### Technical Report
+#### Dataset Creation
+#### Preprocessing
+#### Neural Network Architecture and Implementation
+#### Results
 
+Screencap video: https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be
+FPV video: https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be
+
+#### Conclusions and Future Work
