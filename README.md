@@ -7,6 +7,9 @@ Bojarski et al. describe a convolutional neural network architecture used to inf
 facing vehicle camera stream. I apply the techniques in this paper to a [driving simulation game](https://github.com/udacity/self-driving-car-sim) 
 : a player inputs controls to the simulator's virtual vehicle, and the mapping between the 
 scene in front of the car and the player's controls is modeled by a neural network to "autonomously drive" the virtual car. 
+Once trained, this neural network implementation drives a virtual car for dozens of laps around a virtual track with no 
+human intervention.
+
 
 ![nvidia demo](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/nvidia_demo.gif)
 ![manual_diving_example](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/manual_driving_example.gif)
@@ -62,7 +65,14 @@ to prepare your dataset to work with this pipeline.
 4. The optional `-g` argument is the GPU batch size i.e. the number of training images and training labels that will fit in VRAM on your machine. The default value of 512 should fit comfortable in a 6GB VRAM machine.
 5. The optional `-r` argument specifies whether or not to randomize the row order of the driving log.
 
-#### Driving Autonomously with `drive.py` and the Unity Simulator
+#### Acquiring a Pre-Trained Model
+
+In case you do not want or are not able to train a neural network on your machine, you can download [my pre-trained model](https://www.dropbox.com/s/l9f4gqb596rnjst/model.h5?dl=0)
+which successfully drives autonomously around a virtual track:
+
+    wget -O model.h5 "https://www.dropbox.com/s/l9f4gqb596rnjst/model.h5?dl=1"
+
+#### Driving Autonomously with a trained model, `drive.py`, and the Unity Simulator
 
 Use `drive.py` in conjunction with the simulator to autonomously drive a virtual car according to a neural network model.
  Usage of `drive.py` requires you to have saved the trained model as an h5 file, e.g. `model.h5`. This type of file is created 
