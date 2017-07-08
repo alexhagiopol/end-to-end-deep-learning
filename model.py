@@ -4,7 +4,7 @@ import argparse
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Train a neural network to autonomously drive a virtual car. Example syntax:\n\npython train_network.py -d udacity_dataset -m model.h5')
+    parser = argparse.ArgumentParser(description='Train a neural network to autonomously drive a virtual car. Example syntax:\n\npython model.py -d udacity_dataset -m model.h5')
     parser.add_argument('--dataset-directory', '-d', dest='dataset_directory', type=str, required=True, help='Required string: Directory containing driving log and images.')
     parser.add_argument('--model-path', '-m', dest='model_path', type=str, required=True, help='Required string: Name of model e.g model.h5.')
     parser.add_argument('--cpu-batch-size', '-c', dest='cpu_batch_size', type=int, required=False, default=1000, help='Optional integer: Image batch size that fits in system RAM. Default 1000.')

@@ -43,12 +43,12 @@ Optional, but recommended on Ubuntu: Install support for NVIDIA GPU acceleration
     pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.1.0-cp35-cp35m-linux_x86_64.whl
 
 ### Execution
-#### Model Training with `train_network.py`
+#### Model Training with `model.py`
 
-This file is the core of this project. Use it to train the NVIDIA model on a driving dataset. Use `python train_network.py -h`
+This file is the core of this project. Use it to train the NVIDIA model on a driving dataset. Use `python model.py -h`
 to see documentation information. Example command:
     
-    python train_network.py -d udacity_dataset -m model.h5 -c 3000
+    python model.py -d udacity_dataset -m model.h5 -c 3000
 
 The program assumes the following: 
 1. The required `-d` argument is a path to the dataset directory.
@@ -58,15 +58,15 @@ should be replaced in the driving log with simply `center_2016_12_01_13_30_48_28
 to prepare your dataset to work with this pipeline. 
     - It's recommened that you start with the example dataset provided in the installation instructions.
 2. The required `-m` argument is the name of the Keras model to export.
-3. The optional `-c` argument is the CPU batch size i.e. the number of measurement groups that will fit in system RAM on your machine. The default value is 1000.
-4. The optional `-g` argument is the GPU batch size i.e. the number of training images and training labels that will fit in VRAM on your machine.
+3. The optional `-c` argument is the CPU batch size i.e. the number of measurement groups that will fit in system RAM on your machine. The default value of 1000 should fit comfortably in a 16GB RAM machine.
+4. The optional `-g` argument is the GPU batch size i.e. the number of training images and training labels that will fit in VRAM on your machine. The default value of 512 should fit comfortable in a 6GB VRAM machine.
 5. The optional `-r` argument specifies whether or not to randomize the row order of the driving log.
 
 #### Driving Autonomously with `drive.py` and the Unity Simulator
 
 Use `drive.py` in conjunction with the simulator to autonomously drive a virtual car according to a neural network model.
  Usage of `drive.py` requires you to have saved the trained model as an h5 file, e.g. `model.h5`. This type of file is created 
-by running `train_network.py` as described above. Once the model has been saved, it can be used with drive.py using this commands:
+by running `model.py` as described above. Once the model has been saved, it can be used with drive.py using this commands:
 
     python drive.py model.h5
 
@@ -80,44 +80,23 @@ Select the lowest resolution and fastest graphical settings. Afterward select "a
 will now drive on its own. This procedure loads the trained model and uses the model to make predictions on individual images in real-time 
 and send the predicted angle back to the simulator server via a websocket connection.
 
-#### Saving a video of the autonomous agent
+#### Saving a Video of Vehicle Performance with `drive.py` and `video.py`.
 
-```sh
-python drive.py model.h5 run1
-```
+    python drive.py model.h5 run1
 
-The fourth argument, `run1`, is the directory in which to save the images seen by the agent. If the directory already exists, it'll be overwritten.
+The fourth argument, `run1`, is the directory in which to save the images seen by the agent. If the directory already exists, it'll be overwritten. The 
+image file name is a timestamp of when the image was seen. This information is used by `video.py` to create a chronological video of the agent driving.
+The following command...
 
-```sh
-ls run1
+    python video.py run1
 
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_424.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_451.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_477.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_528.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_573.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_618.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_697.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_723.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_749.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_817.jpg
-...
-```
+...creates a video based on images found in the `run1` directory. The name of the video will be the name of the directory 
+followed by `'.mp4'`, so, in this case the video will be `run1.mp4`. Optionally, one can specify the FPS (frames per second) of the video
+like so:
 
-The image file name is a timestamp of when the image was seen. This information is used by `video.py` to create a chronological video of the agent driving.
+    python video.py run1 --fps 48
 
-##### `video.py`
+This will run the video at 48 FPS. The default FPS is 60.
 
-```sh
-python video.py run1
-```
+### Technical Report
 
-Creates a video based on images found in the `run1` directory. The name of the video will be the name of the directory followed by `'.mp4'`, so, in this case the video will be `run1.mp4`.
-
-Optionally, one can specify the FPS (frames per second) of the video:
-
-```sh
-python video.py run1 --fps 48
-```
-
-Will run the video at 48 FPS. The default FPS is 60.
