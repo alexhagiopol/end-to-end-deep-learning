@@ -125,4 +125,8 @@ a center image, a left side image, and a right side image.
 Screencap video: https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be
 FPV video: https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be
 
+Left View| Center View | Right View
+----|--------|-------
+![left](./figures/left.jpg) | ![center](./figures/center.png) | ![right](./figures/right.jpg)
+
 #### Conclusions and Future Work
