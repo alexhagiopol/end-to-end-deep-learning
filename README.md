@@ -111,6 +111,15 @@ This will run the video at 48 FPS. The default FPS is 60.
 ### Technical Report
 #### Dataset Creation
 
+![training](https://github.com/alexhagiopol/end_to_end_learning/blob/master/figures/training.gif)
+![training](./figures/training.gif)
+
+A human player plays the simulation game manually and records game footage that is later used to train a neural network.
+On each animation frame of the simulator, three virtual cameras on the front of the car capture 3 images into the dataset: 
+a center image, a left side image, and a right side image. 
+
+
+
 #### Preprocessing
 #### Neural Network Architecture and Implementation
 #### Training Procedure
