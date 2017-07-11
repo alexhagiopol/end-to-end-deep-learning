@@ -116,7 +116,7 @@ This will run the video at 48 FPS. The default FPS is 60.
 A human player plays the simulation game manually and records game footage that is later used to train a neural network.
 On each animation frame of the simulator, three virtual cameras on the front of the car capture 3 images into the dataset: 
 a center image, a left side image, and a right side image. Over the course of gameplay, tens of thousands of (image, steering input)
-pairs are recorded.
+data pairs are recorded.
 
 Left Camera View | Center Camera View | Right Camera View
 ----|--------|-------
@@ -125,20 +125,14 @@ Left Camera View | Center Camera View | Right Camera View
 #### Preprocessing
 
 
-#### Neural Network Architecture and Implementation
-
-
-#### Training Procedure
+#### Neural Network Architecture
+#### Training
 #### Results
-
-
+This neural network implementation successfully drives a virtual car for dozens of laps around a virtual track with no 
+human intervention. Over 1 hour of video evidence is provided below:
 
 Autonomous Mode Full Screen Capture | Autonomous Mode FPV Feed
 ---------|----------
 [![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode FPV Demo")
-
-
-Screencap video: https://www.youtube.com/watch?v=xvFVDO90FAk&feature=youtu.be
-FPV video: https://www.youtube.com/watch?v=hVnFfWRphCg&feature=youtu.be
 
 #### Conclusions and Future Work
