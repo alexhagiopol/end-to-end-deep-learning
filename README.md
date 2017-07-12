@@ -2,14 +2,13 @@
 
 ### Abstract
 
-This project implements NVIDIA's 2016 paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
+This project implements the 2016 paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf) in which 
 Bojarski et al. describe a convolutional neural network architecture used to infer vehicle control inputs given a forward 
 facing vehicle camera stream. I apply the techniques in this paper to a [driving simulation game](https://github.com/udacity/self-driving-car-sim) 
 : a player inputs controls to the simulator's virtual vehicle, and the mapping between the 
 scene in front of the car and the player's controls is modeled by a neural network to "autonomously drive" the virtual car. 
 Once trained, this neural network implementation drives a virtual car for dozens of laps around a virtual track with no 
 human intervention.
-
 
 ![nvidia demo](figures/nvidia_demo.gif)
 ![manual_diving_example](figures/manual_driving_example.gif)
@@ -114,7 +113,7 @@ This will run the video at 48 FPS. The default FPS is 60.
 ![training](figures/training.gif)
 
 A human player plays the simulation game manually and records game footage that is later used to train a neural network.
-On each animation frame of the simulator, three virtual cameras on the front of the car capture 3 images into the dataset: 
+On one of each six animation frames of the simulator (10 Hz), three virtual cameras on the front of the car capture 3 images into the dataset: 
 a center image, a left side image, and a right side image. Over the course of gameplay, tens of thousands of (image, steering input)
 data pairs are recorded.
 
@@ -123,10 +122,41 @@ Left Camera View | Center Camera View | Right Camera View
 ![left](figures/left.jpg) | ![center](figures/center.jpg) | ![right](figures/right.jpg)
 
 #### Preprocessing
+At each moment in which player data is recorded, a single steering input is recorded. This steering input is thus associated with 
+three images: a left image, a center image, and a right image. However at inference time, a single steering input is inferred by
+the neural network given a single center view image. Thus, to make the left and right view images useful for neural network training,
+the steering input is increased by 0.2 degrees for a left image and decreased by 0.2 degrees for a right image.
 
+Furthermore, the network must learn how to react to all kinds of turns. Unfortunately, a racing track will provide mostly left
+turns as examples because the car travels along the track counterclockwise. Thus the dataset is augmented with horizontally flipped
+versions of the three types of input images described in the previous paragraph as shown below:
+
+![preprocessing](/figures/preprocessing.png)
+
+In total, for each moment in which player training data is collected, 6 (image, steering input) pairs are added as training examples for
+the neural network. The next preprocessing step is normalization to ensure numerical stability during weight value optimization.
+The final preprocessing step is randomization: the dataset is shuffled such that the order of the (image, steering input)
+pairs is random.
 
 #### Neural Network Architecture
+This project uses a Keras implementation of the model described by Bojarski et al in the paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf)
+which uses the convolutional architecture depicted in the following figure from the paper:
+
+![architecture](/figures/architecture.png)
+
+Rectified linear units are used as activation functions for each layer. Unlike the paper, this project performs 
+preprocessing (including normalization) in batches outside of the training procedure. Thus, preprocessing is not GPU accelerated, 
+but also does not have to be re-performed each time the network is retrained. For real-time performance applications, the GPU 
+implementation of any preprocessing steps should be considered to increase the inference framerate.
+
 #### Training
+The example dataset contains over 24,000 example camera views. With preprocessing, this total rises to over 48,000 training examples.
+This project implements user-configurable batch-based training such that the dataset is trained in batches big enough to fit in CPU
+and GPU memory. The neural network is trained using Keras implementation of the Adam optimizer and the mean squared error
+loss function. Before training and batching begins, the dataset is divided into training and validation sets: 20% of the
+dataset is reserved for validation. Using an NVIDIA GTX 1060 GPU and Intel Pentium G4600 CPU, training the entire dataset 
+in batches for 15 epochs per batch takes 10 minutes.
+
 #### Results
 This neural network implementation successfully drives a virtual car for dozens of laps around a virtual track with no 
 human intervention. Over 1 hour of video evidence is provided below:
@@ -135,4 +165,24 @@ Autonomous Mode Full Screen Capture | Autonomous Mode FPV Feed
 ---------|----------
 [![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode FPV Demo")
 
+As is to be expected, obstacles and terrain not encountered in the training set cause issues if they appear in the test
+set. When the neural network's performance was tested on a track with a differently patterned driving surface, different 
+surrounding flora, and different obstacles, the network's decisions caused collisions and poor dirving performance. The folowing
+figure illustrates a collision with an obstacle type not encountered in the training set that appears in a different testing track:
+
+![new_track](figures/new_track.png)
+
 #### Conclusions and Future Work
+Although the driving performance observed in the videos is encouraging, much work remains to create a complete autonomous agent 
+for simulated driving. Future work on this project will be aimed at improving the generalization capabilities of this technique such that the 
+system will be able to competently drive in diverse simulated environments. Two ways to improve generalization are 
+to (1) augment the training dataset with more varied data and (2) to increase the sophistication of the algorithm applied to
+this problem. Method (1) can be implemented by carrying out more human-controlled simulated driving runs to record more
+training data. This method is limited in that it scales poorly because it requires long hours of manual work. Method (2)
+can be implemented by either (a) researching improved network architectures for end-to-end learning and (b) attempting 
+improved preprocessing techniques not discussed in the cited paper. Option (b) could be approached by experimenting
+with preprocessing techniques that focus on the general task at hand: staying between the lines defined by the border between
+driving surface and non-driving surface. One possible method would be to use gradient images or images processed with [Canny
+edge detection](https://pdfs.semanticscholar.org/55e6/6333402df1a75664260501522800cf3d26b9.pdf) or [line segment detectors](https://pdfs.semanticscholar.org/55e6/6333402df1a75664260501522800cf3d26b9.pdf)
+ as inputs to the neural network as opposed to normalized color images. The potential drawback of this option
+is that it introduces the issue of manually tuning more hyperparameters for any such edge or line detection algorithm. 
