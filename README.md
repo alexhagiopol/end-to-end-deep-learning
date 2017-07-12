@@ -134,9 +134,9 @@ versions of the three types of input images described in the previous paragraph 
 ![preprocessing](/figures/preprocessing.png)
 
 In total, for each moment in which player training data is collected, 6 (image, steering input) pairs are added as training examples for
-the neural network. The next preprocessing step is normalization to ensure numerical stability during weight value optimization.
-The final preprocessing step is randomization: the dataset is shuffled such that the order of the (image, steering input)
-pairs is random.
+the neural network. The next preprocessing step is cropping to remove parts of the scene that do not contain the road and
+ normalization to ensure numerical stability during weight value optimization. The final preprocessing step is randomization: 
+ the dataset is shuffled such that the order of the (image, steering input) pairs is random.
 
 #### Neural Network Architecture
 This project uses a Keras implementation of the model described by Bojarski et al in the paper [End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316.pdf)
@@ -183,6 +183,6 @@ can be implemented by either (a) researching improved network architectures for 
 improved preprocessing techniques not discussed in the cited paper. Option (b) could be approached by experimenting
 with preprocessing techniques that focus on the general task at hand: staying between the lines defined by the border between
 driving surface and non-driving surface. One possible method would be to use gradient images or images processed with [Canny
-edge detection](https://pdfs.semanticscholar.org/55e6/6333402df1a75664260501522800cf3d26b9.pdf) or [line segment detectors](https://pdfs.semanticscholar.org/55e6/6333402df1a75664260501522800cf3d26b9.pdf)
+edge detection](https://pdfs.semanticscholar.org/55e6/6333402df1a75664260501522800cf3d26b9.pdf) or [line segment detectors](http://www.ipol.im/pub/art/2012/gjmr-lsd/article.pdf)
  as inputs to the neural network as opposed to normalized color images. The potential drawback of this option
 is that it introduces the issue of manually tuning more hyperparameters for any such edge or line detection algorithm. 
