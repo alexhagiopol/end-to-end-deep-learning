@@ -128,12 +128,13 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
         X_train[datum_index + 5, :, :, :] = flipped_right
         measurement_index += 1
         if debug:
-            show_image((2, 3, 1), "left " + str(y_train[datum_index + 1]), preprocessed_left_image_matrix)
-            show_image((2, 3, 2), "center " + str(y_train[datum_index]), preprocessed_center_image_matrix)
-            show_image((2, 3, 3), "right " + str(y_train[datum_index + 2]), preprocessed_right_image_matrix)
-            show_image((2, 3, 4), "left flipped " + str(y_train[datum_index + 4]), flipped_left)
-            show_image((2, 3, 5), "center flipped " + str(y_train[datum_index + 3]), flipped_center)
-            show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
+            plt.figure(figsize=(15, 5))
+            show_image((2, 3, 1), "Left View w/ Steering Angle " + str(y_train[datum_index]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(preprocessed_left_image_matrix + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 2), "Center View w/ Steering Angle " + str(y_train[datum_index]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(preprocessed_center_image_matrix + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 3), "Right View w/ Steering Angle " + str(y_train[datum_index + 2]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(preprocessed_right_image_matrix + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 4), "Flipped Left View w/ Steering Angle " + str(y_train[datum_index + 4]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(flipped_left + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 5), "Flipped Center View w/ Steering Angle " + str(y_train[datum_index + 3]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(flipped_center + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 6), "Flipped Right View w/ Steering Angle " + str(y_train[datum_index + 5]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(flipped_right + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
             plt.show()
             plt.close()
         print('Pre-processed ', measurement_index, ' of ', max_measurement_index, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
@@ -147,8 +148,8 @@ def save_dict_to_pickle(dataset, file_path):
     print("Done.")
 
 
-def show_image(location, title, img, width=None):
-    if width is not None:
+def show_image(location, title, img, width=3, open_new_window=False):
+    if open_new_window:
         plt.figure(figsize=(width, width))
     plt.subplot(*location)
     plt.title(title, fontsize=8)
@@ -157,6 +158,6 @@ def show_image(location, title, img, width=None):
         plt.imshow(img)
     else:
         plt.imshow(img, cmap='gray')
-    if width is not None:
+    if open_new_window:
         plt.show()
         plt.close()

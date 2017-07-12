@@ -20,7 +20,7 @@ if __name__ == "__main__":
     dataset_size = dataset_log.shape[0]
     # use first 20% of dataset for validation
     validation_batch_size = int(0.2 * dataset_size)
-    validation_set = utilities.batch_preprocess(args.dataset_directory, measurement_range=(measurement_index, validation_batch_size))
+    validation_set = utilities.batch_preprocess(args.dataset_directory, measurement_range=(measurement_index, validation_batch_size), debug=False)
     X_valid = validation_set['features']
     y_valid = validation_set['labels']
     measurement_index = validation_batch_size  # update measurement index to the end of the validation set
