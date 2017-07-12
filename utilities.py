@@ -71,15 +71,6 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
     Preprocess all images and measurements then save them to disk in Keras-compatible format.
     # + numbers go right, - numbers go left. Thus for left camera we correct right and for right camera we collect left.
     """
-    '''
-    assert(os.path.exists(image_input_dir))
-    print("Using image input dir", image_input_dir)
-    log_file_list = glob.glob(os.path.join(image_input_dir, '*.csv'))
-    assert(len(log_file_list) == 1)
-    log_file = log_file_list[0]
-    print("Using log file", log_file)
-    driving_log = pd.read_csv(log_file, header=None)
-    '''
     driving_log = get_dataset_from_csv(image_input_dir)
     if measurement_range[0]:
         measurement_index = measurement_range[0]
@@ -103,9 +94,6 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
         if debug:
             print("Using center image path", center_image_path)
         center_image_matrix = cv2.imread(center_image_path)
-        #RGB_center_image_matrix = cv2.cvtColor(center_image_matrix, cv2.COLOR_BGR2RGB)
-        #if center_image_filename == 'center_2017_06_14_11_26_17_815.jpg':
-        #    debug = True
         preprocessed_center_image_matrix = preprocess_color(center_image_matrix)
         X_train[datum_index, :, :, :] = preprocessed_center_image_matrix  # center image matrix added to dataset
         # LEFT CAMERA IMAGE
@@ -140,12 +128,13 @@ def batch_preprocess(image_input_dir, l_r_correction=0.2, debug=False, measureme
         X_train[datum_index + 5, :, :, :] = flipped_right
         measurement_index += 1
         if debug:
-            show_image((2, 3, 1), "left " + str(y_train[datum_index + 1]), preprocessed_left_image_matrix)
-            show_image((2, 3, 2), "center " + str(y_train[datum_index]), preprocessed_center_image_matrix)
-            show_image((2, 3, 3), "right " + str(y_train[datum_index + 2]), preprocessed_right_image_matrix)
-            show_image((2, 3, 4), "left flipped " + str(y_train[datum_index + 4]), flipped_left)
-            show_image((2, 3, 5), "center flipped " + str(y_train[datum_index + 3]), flipped_center)
-            show_image((2, 3, 6), "right flipped " + str(y_train[datum_index + 5]), flipped_right)
+            plt.figure(figsize=(15, 5))
+            show_image((2, 3, 1), "Left View w/ Steering Angle " + str(y_train[datum_index]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(preprocessed_left_image_matrix + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 2), "Center View w/ Steering Angle " + str(y_train[datum_index]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(preprocessed_center_image_matrix + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 3), "Right View w/ Steering Angle " + str(y_train[datum_index + 2]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(preprocessed_right_image_matrix + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 4), "Flipped Left View w/ Steering Angle " + str(y_train[datum_index + 4]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(flipped_left + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 5), "Flipped Center View w/ Steering Angle " + str(y_train[datum_index + 3]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(flipped_center + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
+            show_image((2, 3, 6), "Flipped Right View w/ Steering Angle " + str(y_train[datum_index + 5]) + " Degrees", cv2.cvtColor(cv2.convertScaleAbs(flipped_right + 0.5, alpha=255), cv2.COLOR_BGR2RGB))
             plt.show()
             plt.close()
         print('Pre-processed ', measurement_index, ' of ', max_measurement_index, ' measurements. Images:', center_image_filename, ' ', left_image_filename, ' ', right_image_filename)
@@ -159,8 +148,8 @@ def save_dict_to_pickle(dataset, file_path):
     print("Done.")
 
 
-def show_image(location, title, img, width=None):
-    if width is not None:
+def show_image(location, title, img, width=3, open_new_window=False):
+    if open_new_window:
         plt.figure(figsize=(width, width))
     plt.subplot(*location)
     plt.title(title, fontsize=8)
@@ -169,6 +158,6 @@ def show_image(location, title, img, width=None):
         plt.imshow(img)
     else:
         plt.imshow(img, cmap='gray')
-    if width is not None:
+    if open_new_window:
         plt.show()
         plt.close()
