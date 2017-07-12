@@ -163,7 +163,7 @@ human intervention. Over 1 hour of video evidence is provided below:
 
 Autonomous Mode Full Screen Capture | Autonomous Mode FPV Feed
 ---------|----------
-[![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode FPV Demo")
+[![screencap](figures/screencap_image.png)](https://www.youtube.com/watch?v=xvFVDO90FAk#t=0s "Autonomous Mode Demo") | [![fpv](figures/fpv_image.png)](https://www.youtube.com/watch?v=hVnFfWRphCg#t=0s "Autonomous Mode FPV Demo")
 
 As is to be expected, obstacles and terrain not encountered in the training set cause issues if they appear in the test
 set. When the neural network's performance was tested on a track with a differently patterned driving surface, different 
